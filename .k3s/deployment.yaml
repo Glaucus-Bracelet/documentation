@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bracelet-documentation
+  namespace: bracelet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bracelet-documentation
+  template:
+    metadata:
+      labels:
+        app: bracelet-documentation
+    spec:
+      containers:
+        - name: bracelet-documentation
+          image: nuriofernandez/bracelet-documentation:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "30Mi"
+              cpu: "20m"
+            requests:
+              memory: "20Mi"
+              cpu: "20m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bracelet-documentation-service
+  namespace: bracelet
+spec:
+  selector:
+    app: bracelet-documentation
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
